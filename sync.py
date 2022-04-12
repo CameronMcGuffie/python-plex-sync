@@ -9,6 +9,7 @@ toServers = [''] # a List of the names of the "to" servers
 
 plex = MyPlexAccount(token)
 
+
 def get_watched(server, library):
     watched_episodes = []
 
@@ -20,19 +21,24 @@ def get_watched(server, library):
 
     return watched_episodes
 
+
 def mark_watched(server, watched, library):
     for episode in watched:
         try:
             show = server.library.section(library).get(episode.grandparentTitle)
-            ep = show.episode(season=int(episode.parentIndex), episode=int(episode.index))
+            ep = show.episode(season=int(episode.parentIndex), 
+                              episode=int(episode.index))
 
-            print('{} - {} - marked as watched.'.format(ep.grandparentTitle, ep.title))
+            print('{} - {} - marked as watched.'.format(ep.grandparentTitle, 
+                                                        ep.title))
 
             ep.markWatched()
         except KeyboardInterrupt:
             break
-        except:
-            print('{} - {} - NOT FOUND!.'.format(ep.grandparentTitle, ep.title))
+        except Exception:
+            print('{} - {} - NOT FOUND!.'.format(episode.grandparentTitle, 
+                                                 episode.title))
+
 
 for fs in fromServers:
     fromServer = plex.resource(fs).connect()
