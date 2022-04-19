@@ -1,13 +1,17 @@
-from plexapi.server import PlexServer
+# from plexapi.server import PlexServer
 from plexapi.myplex import MyPlexAccount
+import configparser
 
-token = '' # Put your plex token here
-
-libs = ['TV Shows'] # a List of the libraries to sync, they must be named the same on all servers
-fromServers = ['', ''] # a List of the names of the "from" servers
-toServers = [''] # a List of the names of the "to" servers
+config = configparser.ConfigParser()
+config.read("secrets/plex.ini")
+inifile = config['Default']
+token = inifile["token"]
+libs = inifile["libs"]
+fromServers = inifile["fromServers"]
+toServers = inifile["toServers"]
 
 plex = MyPlexAccount(token)
+
 
 def get_watched(server, library):
     watched_episodes = []
@@ -20,19 +24,24 @@ def get_watched(server, library):
 
     return watched_episodes
 
+
 def mark_watched(server, watched, library):
     for episode in watched:
         try:
             show = server.library.section(library).get(episode.grandparentTitle)
-            ep = show.episode(season=int(episode.parentIndex), episode=int(episode.index))
+            ep = show.episode(season=int(episode.parentIndex), 
+                              episode=int(episode.index))
 
-            print('{} - {} - marked as watched.'.format(ep.grandparentTitle, ep.title))
+            print('{} - {} - marked as watched.'.format(ep.grandparentTitle, 
+                                                        ep.title))
 
             ep.markWatched()
         except KeyboardInterrupt:
             break
-        except:
-            print('{} - {} - NOT FOUND!.'.format(ep.grandparentTitle, ep.title))
+        except Exception:
+            print('{} - {} - NOT FOUND!.'.format(episode.grandparentTitle, 
+                                                 episode.title))
+
 
 for fs in fromServers:
     fromServer = plex.resource(fs).connect()

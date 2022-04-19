@@ -1,0 +1,12 @@
+[Default]
+# Put your plex token here
+# script below to help grab token
+# https://github.com/Fmstrat/plex-cluster/blob/7d0ece50bda94f00b86eb871f98fedaf877f56d2/tools/get-plex-token.sh
+token = 'RjH38v10J5ifGnohzmAg'
+# a List of the libraries to sync,
+# they must be named the same on all servers
+libs = ['TV Shows', 'Movies', 'Music']
+# a List of the names of the "from" servers
+fromServers = ['bob', 'linda']
+# a List of the names of the "to" servers
+toServers = ['tina', 'gene']
